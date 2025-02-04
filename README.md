@@ -6,38 +6,37 @@ This API classifies a given number based on various mathematical properties and 
 
 ### 1. Set Up Virtual Environment
 
-1. SSH into your EC2 instance.
+- SSH into your EC2 instance.
+- Install python3 and pip3 if not already installed:
 
-2. Install `python3` and `pip3` if not already installed:
+```bash
+sudo apt update
+sudo apt install python3 python3-pip
+```
 
-    ```bash
-    sudo apt update
-    sudo apt install python3 python3-pip
-    ```
+- Install virtualenv if it's not already installed:
 
-3. Install `virtualenv` if it's not already installed:
+```bash
+sudo pip3 install virtualenv
+```
 
-    ```bash
-    sudo pip3 install virtualenv
-    ```
+- Navigate to your project directory:
 
-4. Navigate to your project directory:
+```bash
+cd /path/to/your/project
+```
 
-    ```bash
-    cd /path/to/your/project
-    ```
+- Create a virtual environment:
 
-5. Create a virtual environment:
+```bash
+python3 -m venv venv
+```
 
-    ```bash
-    python3 -m venv venv
-    ```
+- Activate the virtual environment:
 
-6. Activate the virtual environment:
-
-    ```bash
-    source venv/bin/activate
-    ```
+```bash
+source venv/bin/activate
+```
 
 ### 2. Install Dependencies
 
@@ -49,11 +48,9 @@ pip install -r requirements.txt
 
 Make sure that the `requirements.txt` file includes:
 
-```
-fastapi
-uvicorn
-requests
-```
+- fastapi
+- uvicorn
+- requests
 
 You can generate the `requirements.txt` using:
 
@@ -69,31 +66,25 @@ After installing the dependencies, you can run the application using `uvicorn`:
 uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
-This will start the FastAPI application on port `8000` and make it accessible on your EC2 instance.
-
----
+This will start the FastAPI application on port 8000 and make it accessible on your EC2 instance.
 
 ## API Documentation
 
 ### Endpoint: Classify Number
-
 **GET** `/api/classify-number`
 
 This endpoint classifies a given number based on various mathematical properties and provides a fun fact about it.
 
 #### Request Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| number    | int  | ✅ Yes   | The number to classify |
+| Parameter  | Type | Required | Description                      |
+|------------|------|----------|----------------------------------|
+| number     | int  | ✅ Yes   | The number to classify           |
 
-#### 📌 Example Request:
-
-```
+#### Example Request:
+```http
 GET /api/classify-number?number=42
 ```
-
----
 
 ### Response Format
 
@@ -101,8 +92,7 @@ GET /api/classify-number?number=42
 
 If a valid number is provided, the API returns an object with the number's properties.
 
-##### ✅ Example Response:
-
+#### Example Response:
 ```json
 {
   "number": 42,
@@ -114,35 +104,33 @@ If a valid number is provided, the API returns an object with the number's prope
 }
 ```
 
-### Response Fields
+#### Response Fields
 
-| Field         | Type   | Description                                                                 |
-|---------------|--------|-----------------------------------------------------------------------------|
-| number        | int    | The number provided in the request                                           |
-| is_prime      | boolean| Whether the number is prime (true or false)                                  |
-| is_perfect    | boolean| Whether the number is a perfect number (true or false)                       |
-| properties    | array  | List of mathematical properties (e.g., "odd", "even", "armstrong")          |
-| digit_sum     | int    | Sum of the digits of the number                                             |
-| fun_fact      | string | A fun fact about the number from the Numbers API                            |
+| Field        | Type   | Description                                |
+|--------------|--------|--------------------------------------------|
+| number       | int    | The number provided in the request         |
+| is_prime     | bool   | Whether the number is prime (true or false)|
+| is_perfect   | bool   | Whether the number is a perfect number (true or false) |
+| properties   | array  | List of mathematical properties (e.g., "odd", "even", "armstrong") |
+| digit_sum    | int    | Sum of the digits of the number           |
+| fun_fact     | string | A fun fact about the number from the Numbers API |
 
----
-
-### Error Responses
+#### Error Responses
 
 - **400 Bad Request – Missing or Invalid Number**
 
   ❌ Example Response (Missing Number):
-
   ```json
   {
     "error": "Number is required"
   }
   ```
 
-  Occurs if the `number` parameter is missing.
+  Occurs if the number parameter is missing.
+
+- **400 Bad Request – Invalid Input**
 
   ❌ Example Response (Invalid Input):
-
   ```json
   {
     "error": true,
@@ -155,7 +143,6 @@ If a valid number is provided, the API returns an object with the number's prope
 - **500 Internal Server Error**
 
   ❌ Example Response:
-
   ```json
   {
     "error": "Internal Server Error"
@@ -164,28 +151,23 @@ If a valid number is provided, the API returns an object with the number's prope
 
   Occurs if there is an unexpected issue with the server or external API.
 
----
-
 ## How to Use
 
 ### With cURL
-
 ```bash
-curl -X GET "http://<your-ec2-ip>:8000/api/classify-number?number=42"
+curl -X GET "http://13.61.182.35:8000/api/classify-number?number=49"
 ```
 
-### With JavaScript (Axios)
+### With Python
 
-```javascript
-import axios from "axios";
+You can use Python’s `requests` module to interact with the API. Here's an example:
 
-axios
-  .get("http://<your-ec2-ip>:8000/api/classify-number?number=42")
-  .then((response) => console.log(response.data))
-  .catch((error) => console.error(error.response.data));
+```python
+import requests
+
+response = requests.get("http://13.61.182.35:8000/api/classify-number?number=49")
+print(response.json())
 ```
-
----
 
 ## Notes
 
@@ -193,11 +175,10 @@ axios
 - Ensure your EC2 instance has internet access.
 - If the Numbers API is down, the response may not include a fun fact.
 
----
-
 ## License
 
 This project is licensed under the MIT License.
 
-```
+
+
 
